@@ -1,0 +1,673 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
+
+    </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+    <!-- <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="1dp"
+        android:background="#fffbfbfb"
+        android:fillViewport="false"
+        android:id="@+id/scrollView">
+
+        <TableLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tableLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:stretchColumns="0"
+            android:background="#fffbfbfb">
+
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Yarn Count"
+                    android:id="@+id/tvyarncount"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxA"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="7"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="40dp"
+                    android:textCursorDrawable="@drawable/color_cursor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+
+                    android:id="@+id/tvyarncountunit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Cotton Price"
+                    android:id="@+id/tvcottonprice"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/etboxB"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="7"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Candy"
+                    android:id="@+id/cottonpriceunit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Cotton Price"
+                    android:id="@+id/tvcottonprice2"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxC"
+                    android:visibility="visible"
+                    android:maxLength="6"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:background="@drawable/ans_rounded_corner_edittext"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:textIsSelectable="false"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Kg"
+                    android:id="@+id/crushingExpenseUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Yield"
+                    android:id="@+id/crudeOilYieldTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxD"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="4"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="%"
+                    android:id="@+id/crudeOilYieldUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Waste Recovery"
+                    android:id="@+id/refinningLossTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxE"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="4"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Kg"
+                    android:id="@+id/refinningLossUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Material Cost"
+                    android:id="@+id/refinedOilYieldTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxF"
+                    android:visibility="visible"
+                    android:maxLength="6"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:background="@drawable/ans_rounded_corner_edittext"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:textIsSelectable="false"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Kg"
+                    android:id="@+id/refinedOilYieldUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp"
+                android:id="@+id/TableRow">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Conversion Cost"
+                    android:id="@+id/oilCakeYieldTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/etboxG"
+                    android:inputType="number|numberDecimal"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="5"
+                    android:theme="@android:style/Theme.Light"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/oilCakeYieldUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000"
+                    android:text="Rs/Kg/Count" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="15dp"
+                android:id="@+id/TableRow1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Commision"
+                    android:id="@+id/shortageTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxH"
+                    android:visibility="visible"
+                    android:maxLength="8"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="%"
+                    android:id="@+id/shortageUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="15dp"
+                android:id="@+id/OilAndRow1" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Other Exp."
+                    android:id="@+id/banolaRealisationTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxI"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="8"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Kg"
+                    android:id="@+id/banolaRealisationUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="10dp"
+                android:id="@+id/OilAndRow2" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Yarn Cost"
+                    android:id="@+id/banolaMarketRateTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/etboxJ"
+                    android:inputType="number|numberDecimal"
+                    android:visibility="visible"
+                    android:background="@drawable/ans_rounded_corner_edittext"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:textIsSelectable="false"
+                    android:maxLength="7"
+                    android:theme="@android:style/Theme.Light"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/banolaMarketRateUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000"
+                    android:text="Rs/Kg" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="15dp"
+                android:id="@+id/OilAndRow3" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/processingMarginTxt"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121"
+                    android:text="Yarn Rate" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxK"
+                    android:visibility="visible"
+                    android:background="@drawable/rounded_corner_edittext"
+                    android:maxLength="8"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Kg"
+                    android:id="@+id/processingMarginUnit"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:layout_marginTop="15dp"
+                android:id="@+id/profit" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tvprofit"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="18dp"
+                    android:width="60dp"
+                    android:textColor="#212121"
+                    android:text="Profit" />
+
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:inputType="number|numberDecimal"
+                    android:id="@+id/etboxL"
+                    android:visibility="visible"
+                    android:background="@drawable/ans_rounded_corner_edittext"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
+                    android:textIsSelectable="false"
+                    android:maxLength="8"
+                    android:theme="@android:style/Theme.Light"
+                    android:autoText="false"
+                    android:textColor="#ff000000"
+                    android:textColorHint="#ffffffff"
+                    android:layout_column="1"
+                    android:width="100dp"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Rs/Kg"
+                    android:id="@+id/tvRsKg"
+                    android:layout_weight="1"
+                    android:layout_column="2"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:width="90dp"
+                    android:textColor="#b9000000" />
+            </TableRow>
+
+
+
+
+
+
+
+
+
+        </TableLayout>
+    </ScrollView> -->
+
+

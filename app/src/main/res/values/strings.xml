@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RP Yarn Calculator</string>
+    <string name="version_number">1.0</string>
+    <string name="days_left">3</string>
+</resources>
