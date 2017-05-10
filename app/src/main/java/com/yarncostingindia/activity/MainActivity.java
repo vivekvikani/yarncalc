@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 
 import com.yarncostingindia.R;
+import com.yarncostingindia.Utils.AppRater;
 import com.yarncostingindia.fragments.OneFragment;
 import com.yarncostingindia.fragments.ThreeFragment;
 import com.yarncostingindia.fragments.TwoFragment;
@@ -66,15 +67,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setCustomView(tabTwo);
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
-
-       /* viewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-
-                return false;
-            }
-        });*/
+        AppRater.app_launched(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {

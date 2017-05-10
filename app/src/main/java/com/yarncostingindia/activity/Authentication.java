@@ -27,7 +27,6 @@ import com.yarncostingindia.Utils.AndyConstants;
 import com.yarncostingindia.parse.HttpRequester;
 import com.yarncostingindia.parse.AsyncTaskCompleteListener;
 import com.yarncostingindia.parse.ParseContent;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
