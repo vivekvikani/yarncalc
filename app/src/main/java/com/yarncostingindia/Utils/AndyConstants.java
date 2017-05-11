@@ -45,4 +45,18 @@ public class AndyConstants {
         public static final String PAYMENTREQUESTURL = "longurl";
         public static final String INSTAMOJOPAYMENTID = "instamojo_payment_id";
     }
+
+    //SP values
+    public class SP {
+        public static final String DAYSLEFT = "daysLeft";
+        public static final String USERNAME = "userName";
+        public static final String PHNNUMBER = "phnNumber";
+        public static final String NAMENUMBERENTERED = "nameNumberEntered";
+        public static final String IMEI = "imei";
+        public static final String SIMID = "simId";
+        public static final String TRIALEXPIRED = "trialExpired";
+        public static final String FULLVERSIONACTIVE = "FullVersionActive";
+        public static final String LASTACCESSDAY = "lastAccessDayofMonth";
+        public static final String FIREBASETOKEN = "firebase_token";
+    }
 }

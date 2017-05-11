@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +23,7 @@ import android.widget.Toast;
 import com.yarncostingindia.R;
 import com.yarncostingindia.Utils.AndyUtils;
 import com.yarncostingindia.Utils.AndyConstants;
+import com.yarncostingindia.Utils.AndyConstants.SP;
 import com.yarncostingindia.parse.HttpRequester;
 import com.yarncostingindia.parse.AsyncTaskCompleteListener;
 import com.yarncostingindia.parse.ParseContent;
@@ -38,7 +38,6 @@ public class Authentication extends AppCompatActivity implements AsyncTaskComple
     public String operatorName;
     public String IMEI;
     public String simID;
-    private ArrayList<HashMap<String,String>> alldetails;
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
     TelephonyManager telephonyManager;
     ProgressDialog progress;
@@ -200,56 +199,28 @@ public class Authentication extends AppCompatActivity implements AsyncTaskComple
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode) {
             case AndyConstants.ServiceCode.REGISTER:
-
                 if (parseContent.isSuccess(response)) {
-                    SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(Authentication.this);
-                    SharedPreferences.Editor editor = appdata.edit();
-                    alldetails = parseContent.getDetaillogin(response);
-                    editor.putInt("daysLeft", Integer.parseInt(alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT)));
-                    editor.putString("userName", alldetails.get(0).get(AndyConstants.Params.NAME));
-                    editor.putString("phnNumber", alldetails.get(0).get(AndyConstants.Params.MOBILE));
-                    editor.putBoolean("nameNumberEntered", true);
-                    //editor.putBoolean("parseEntryDone", true);
-                    //editor.putInt("userRegistered", 0);
-                    editor.commit();
-
+                    saveSP(response);
                     progress.dismiss();
-
                     Intent myIntent = new Intent(Authentication.this, MainActivity.class);
                     startActivity(myIntent);
                     finish();
                 }else {
-                    AndyUtils.showToast(
-                            "Unable to register",
-                            Authentication.this);
+                    //TODO Test this!
                     progress.dismiss();
+                    AndyUtils.showAlertDialog(this,"Error","Unable to register, please try again");
                 }
                 break;
 
             case AndyConstants.ServiceCode.CHECKIMEI:
-
                 if (parseContent.isSuccess(response)) {
-
-                    SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(Authentication.this);
-                    SharedPreferences.Editor editor = appdata.edit();
-
-                    alldetails = parseContent.getDetaillogin(response);
-                    editor.putInt("daysLeft", Integer.parseInt(alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT)));
-                    editor.putString("userName", alldetails.get(0).get(AndyConstants.Params.NAME));
-                    editor.putString("phnNumber", alldetails.get(0).get(AndyConstants.Params.MOBILE));
-                    editor.putBoolean("nameNumberEntered", true);
-                    //editor.putBoolean("parseEntryDone", true);
-                    //editor.putInt("userRegistered", 0);
-                    editor.commit();
-
+                    saveSP(response);
                     progress.dismiss();
-
                     Intent myIntent = new Intent(Authentication.this, MainActivity.class);
                     startActivity(myIntent);
                     finish();
                 }
-                else
-                {
+                else {
                     progress.dismiss();
                 }
                 break;
@@ -257,5 +228,21 @@ public class Authentication extends AppCompatActivity implements AsyncTaskComple
             default:
                 break;
         }
+    }
+
+    public void saveSP(String response)
+    {
+        SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(Authentication.this);
+        SharedPreferences.Editor editor = appdata.edit();
+        ArrayList<HashMap<String, String>> alldetails = parseContent.getDetaillogin(response);
+        editor.putInt(SP.DAYSLEFT, Integer.parseInt(alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT)));
+        editor.putString(SP.USERNAME, alldetails.get(0).get(AndyConstants.Params.NAME));
+        editor.putString(SP.PHNNUMBER, alldetails.get(0).get(AndyConstants.Params.MOBILE));
+        editor.putBoolean(SP.NAMENUMBERENTERED, true);
+        editor.putString(SP.IMEI, IMEI);
+        editor.putString(SP.SIMID, simID);
+        //editor.putBoolean("parseEntryDone", true);
+        //editor.putInt("userRegistered", 0);
+        editor.commit();
     }
 }

@@ -2,9 +2,8 @@ package com.yarncostingindia.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Handler;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,32 +11,38 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.view.InflateException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.yarncostingindia.R;
+import com.yarncostingindia.Utils.AndyConstants;
+import com.yarncostingindia.Utils.AndyUtils;
 import com.yarncostingindia.Utils.AppRater;
+import com.yarncostingindia.Utils.DaysLeftDaily;
 import com.yarncostingindia.fragments.OneFragment;
 import com.yarncostingindia.fragments.ThreeFragment;
 import com.yarncostingindia.fragments.TwoFragment;
+import com.yarncostingindia.parse.AsyncTaskCompleteListener;
+import com.yarncostingindia.parse.HttpRequester;
+import com.yarncostingindia.Utils.AndyConstants.SP;
+import com.yarncostingindia.parse.ParseContent;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncTaskCompleteListener{
 
 
     private TabLayout tabLayout;
     public  ViewPager viewPager;
+    private ParseContent parseContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-
-
        // getSupportActionBar().setHomeAsUpIndicator(R.mipmap.back_button);
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -62,12 +65,66 @@ public class MainActivity extends AppCompatActivity {
         TextView tabTwo = (TextView) headerView.findViewById(R.id.tvtab2);
         TextView tabThree = (TextView) headerView.findViewById(R.id.tvtab3);
 
-
         tabLayout.getTabAt(0).setCustomView(tabOne);
         tabLayout.getTabAt(1).setCustomView(tabTwo);
         tabLayout.getTabAt(2).setCustomView(tabThree);
 
+        parseContent = new ParseContent(this);
+        DaysLeftDaily.daysLeftCheckLocal(this); //Checks and reduces days left daily locally
         AppRater.app_launched(this);
+        checkDaysLeftonServer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DaysLeftDaily.daysLeftCheckLocal(this); //Checks and reduces days left daily locally
+    }
+
+    private void checkDaysLeftonServer() {
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        if (!AndyUtils.isNetworkAvailable(MainActivity.this)) {
+            AndyUtils.showToast(
+                    "Internet is not available!",
+                    MainActivity.this);
+        }
+        SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put(AndyConstants.URL, AndyConstants.ServiceType.LOGIN);
+
+        map.put(AndyConstants.Params.IMEI, appdata.getString(SP.IMEI,"0"));
+        map.put(AndyConstants.Params.VERSION, getString(R.string.version_number));
+        map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(appdata.getInt(SP.DAYSLEFT, 0)));
+        map.put(AndyConstants.Params.LAST_ACCESS, currentDateTimeString);
+        map.put(AndyConstants.Params.NOTIFICATION_TOKEN, appdata.getString(SP.FIREBASETOKEN, null));
+
+        new HttpRequester(MainActivity.this, map,
+                AndyConstants.ServiceCode.LOGIN, this);
+    }
+
+    @Override
+    public void onTaskCompleted(String response, int serviceCode) {
+        Log.d("responsejson login", response);
+        switch (serviceCode) {
+            case AndyConstants.ServiceCode.LOGIN:
+
+                if (parseContent.isSuccess(response)) {
+
+                    SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    SharedPreferences.Editor editor = appdata.edit();
+
+                    ArrayList<HashMap<String, String>> alldetails = parseContent.getDetaillogin(response);
+                    System.out.println("DAYS LEFT HTTP SERVER: " + alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT));
+                    editor.putInt(SP.DAYSLEFT, Integer.parseInt(alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT)));
+                    editor.commit();
+                } else {
+                    String msg = parseContent.getErrorCode(response);
+                    Log.d("Login error", msg);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -126,8 +183,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-
-
        /* if(id == R.id.action_aboutus){
 
             startActivity(new Intent(this,AboutusActivity.class));
@@ -139,435 +194,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         moveTaskToBack(true);
     }
 
     public void aboutusClicked(View v){
-
         startActivity(new Intent(this,AboutusActivity.class));
-
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   /* private EditText etA, etB, etC, etD, etE, etF, etG, etH, etI, etJ, etK, etL;
-    private TextView tvProfit;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        etA = (EditText) findViewById(R.id.etboxA);
-        etB = (EditText) findViewById(R.id.etboxB);
-        etC = (EditText) findViewById(R.id.etboxC);
-        etD = (EditText) findViewById(R.id.etboxD);
-        etE = (EditText) findViewById(R.id.etboxE);
-        etF = (EditText) findViewById(R.id.etboxF);
-        etG = (EditText) findViewById(R.id.etboxG);
-        etH = (EditText) findViewById(R.id.etboxH);
-        etI = (EditText) findViewById(R.id.etboxI);
-        etJ = (EditText) findViewById(R.id.etboxJ);
-        etK = (EditText) findViewById(R.id.etboxK);
-        etL = (EditText) findViewById(R.id.etboxL);
-
-        tvProfit = (TextView) findViewById(R.id.tvprofit);
-
-       // etA.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(5, 1)});
-        etB.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(!etB.getText().toString().equals("")){
-                    float ans = (float) (Float.parseFloat(etB.getText().toString())/355.6164);
-                    etC.setText(String.valueOf(ans));
-                }
-                else {
-                    etC.setText("");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etC.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if(etC.getText().toString().equals("")){
-
-                    etF.setText("");
-                }else if(!etC.getText().toString().equals("") && !etD.getText().toString().equals("") && !etE.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etC.getText().toString())*100 / Float.parseFloat(etD.getText().toString())) - Float.parseFloat(etE.getText().toString());
-                    etF.setText(String.valueOf(ans));
-                }
-                else if(!etC.getText().toString().equals("") && !etD.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etC.getText().toString())*100 / Float.parseFloat(etD.getText().toString()));
-                    etF.setText(String.valueOf(ans));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etD.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(! (etC.getText().toString().equals("") || etD.getText().toString().equals("")) && etE.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etC.getText().toString())*100 / Float.parseFloat(etD.getText().toString()));
-                    etF.setText(String.valueOf(ans));
-
-                }else if(!etC.getText().toString().equals("") && !etD.getText().toString().equals("") && !etE.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etC.getText().toString())*100 / Float.parseFloat(etD.getText().toString())) - Float.parseFloat(etE.getText().toString());
-                    etF.setText(String.valueOf(ans));
-                }
-                else  {
-                    etF.setText("");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etE.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etC.getText().toString().equals("") && !etD.getText().toString().equals("")) && etE.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etC.getText().toString())*100 / Float.parseFloat(etD.getText().toString()));
-                    etF.setText(String.valueOf(ans));
-                }
-                else {
-                    float ans = (float)  ( Float.parseFloat(etC.getText().toString())*100 / Float.parseFloat(etD.getText().toString())) - Float.parseFloat(etE.getText().toString());
-                    etF.setText(String.valueOf(ans));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etI.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && !etI.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                                         ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                                         ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) )) +
-                                         ( Float.parseFloat(etI.getText().toString()));
-                    etJ.setText(String.valueOf(ans));
-                }
-               else if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && etI.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) ));
-                    etJ.setText(String.valueOf(ans));
-                }
-            }
-
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etK.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etJ.getText().toString().equals("") && !etK.getText().toString().equals(""))){
-
-                    float ans = (float)  ( Float.parseFloat(etK.getText().toString()) - Float.parseFloat(etJ.getText().toString()));
-
-                    if( Float.parseFloat(etJ.getText().toString()) > Float.parseFloat(etK.getText().toString())){
-
-                        tvProfit.setText("Loss");
-                        ans = ans - (ans*2);
-                        etL.setText(String.valueOf(ans));
-                    }else {
-
-                        tvProfit.setText("Profit");
-                        etL.setText(String.valueOf(ans));
-                    }
-                }
-                else if(etJ.getText().toString().equals("") || etK.getText().toString().equals("")) {
-
-
-                    etL.setText("");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etJ.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etJ.getText().toString().equals("") && !etK.getText().toString().equals(""))){
-
-                    float ans = (float)  ( Float.parseFloat(etK.getText().toString()) - Float.parseFloat(etJ.getText().toString()));
-
-                    if( Float.parseFloat(etJ.getText().toString()) > Float.parseFloat(etK.getText().toString())){
-
-                        tvProfit.setText("Loss");
-                        ans = ans - (ans*2);
-                        etL.setText(String.valueOf(ans));
-                    }else {
-
-                        tvProfit.setText("Profit");
-                        etL.setText(String.valueOf(ans));
-                    }
-                }
-                else if(etJ.getText().toString().equals("") || etK.getText().toString().equals("")) {
-
-
-                    etL.setText("");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etA.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && !etI.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) )) +
-                            ( Float.parseFloat(etI.getText().toString()));
-                    etJ.setText(String.valueOf(ans));
-                } else if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && etI.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) ));
-                    etJ.setText(String.valueOf(ans));
-                }
-                else if(etA.getText().toString().equals("")){
-
-                    etJ.setText("");
-                }
-            }
-
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etF.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && !etI.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) )) +
-                            ( Float.parseFloat(etI.getText().toString()));
-                    etJ.setText(String.valueOf(ans));
-                } else if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && etI.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) ));
-                    etJ.setText(String.valueOf(ans));
-                }
-                else if(etF.getText().toString().equals("")){
-
-                    etJ.setText("");
-                }
-            }
-
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etG.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && !etI.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) )) +
-                            ( Float.parseFloat(etI.getText().toString()));
-                    etJ.setText(String.valueOf(ans));
-                } else if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && etI.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) ));
-                    etJ.setText(String.valueOf(ans));
-                }
-                else if(etG.getText().toString().equals("")){
-
-                    etJ.setText("");
-                }
-            }
-
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        etH.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && !etI.getText().toString().equals("")){
-
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) )) +
-                            ( Float.parseFloat(etI.getText().toString()));
-                    etJ.setText(String.valueOf(ans));
-                } else if((!etF.getText().toString().equals("") && !etA.getText().toString().equals("")) && !etG.getText().toString().equals("") && !etH.getText().toString().equals("") && etI.getText().toString().equals("")){
-                    float ans = (float)  ( Float.parseFloat(etF.getText().toString()) ) +
-                            ( Float.parseFloat(etA.getText().toString()) * Float.parseFloat(etG.getText().toString()) ) +
-                            ( Float.parseFloat(etF.getText().toString()) * ( (Float.parseFloat(etH.getText().toString()) / 100) ));
-                    etJ.setText(String.valueOf(ans));
-                }
-                else if(etH.getText().toString().equals("")){
-
-                    etJ.setText("");
-                }
-            }
-
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-    }
-
-    public class DecimalDigitsInputFilter implements InputFilter {
-
-        Pattern mPattern;
-
-        public DecimalDigitsInputFilter(int digitsBeforeZero,int digitsAfterZero) {
-            mPattern= Pattern.compile("[0-9]{0," + (digitsBeforeZero - 1) + "}+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?");
-        }
-
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-
-            Matcher matcher=mPattern.matcher(dest);
-            if(!matcher.matches())
-                return "";
-            return null;
-        }
-
-    }*/
 
